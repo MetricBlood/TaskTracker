@@ -1,6 +1,103 @@
-@TaskTrackerApi_HostAddress = http://localhost:5210
+@host = https://localhost:7208
 
-GET {{TaskTrackerApi_HostAddress}}/weatherforecast/
-Accept: application/json
+# ---------- Projects ----------
 
-###
+### Get all projects (200)
+GET {{host}}/api/projects
+
+### Get one project (200)
+GET {{host}}/api/projects/1
+
+### Get a project that does not exist (404)
+GET {{host}}/api/projects/99
+
+### Create a project (201)
+POST {{host}}/api/projects
+Content-Type: application/json
+
+{
+  "name": "Test Project",
+  "description": "Testing"
+}
+
+### Create a project with no name (400)
+POST {{host}}/api/projects
+Content-Type: application/json
+
+{
+  "name": ""
+}
+
+### Update a project (200)
+PUT {{host}}/api/projects/3
+Content-Type: application/json
+
+{
+  "name": "Renamed Project",
+  "description": "Updated description"
+}
+
+### Delete a project and its tasks (204)
+DELETE {{host}}/api/projects/3
+
+# ---------- Tasks ----------
+
+### Get all tasks in a project (200)
+GET {{host}}/api/projects/1/tasks
+
+### Get tasks for a project that does not exist (404)
+GET {{host}}/api/projects/99/tasks
+
+### Get one task (200)
+GET {{host}}/api/tasks/4
+
+### Get a task that does not exist (404)
+GET {{host}}/api/tasks/99
+
+### Create a task in a project (201)
+POST {{host}}/api/projects/2/tasks
+Content-Type: application/json
+
+{
+  "title": "Write release notes",
+  "status": "Todo",
+  "dueDate": "2026-10-25T00:00:00Z"
+}
+
+### Create a task in a project that does not exist (404)
+POST {{host}}/api/projects/99/tasks
+Content-Type: application/json
+
+{
+  "title": "Write release notes"
+}
+
+### Create a task with no title (400)
+POST {{host}}/api/projects/2/tasks
+Content-Type: application/json
+
+{
+  "title": ""
+}
+
+### Update a task (200)
+PUT {{host}}/api/tasks/5
+Content-Type: application/json
+
+{
+  "title": "Write release notes",
+  "status": "InProgress",
+  "dueDate": "2026-10-25T00:00:00Z"
+}
+
+### Update a task with an invalid status (400)
+PUT {{host}}/api/tasks/5
+Content-Type: application/json
+
+{
+  "title": "Write release notes",
+  "status": "Finished"
+}
+
+### Delete a task (204)
+DELETE {{host}}/api/tasks/5
